@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobMatch — Лидер</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <header class="header">
+        <a href="{% url 'leader_home' %}"  class="logo">
+            <img src="{% static 'png/logo.png' %}" alt="Logo" class="logo-img">
+            <aspan class="logo-text">JobMatch</span>
+
+        <nav class="nav">
+            <a href="{% url 'leader_home' %}" class="nav-link">Главная</a>
+            <a href="{% url 'profile_leader' %}" class="nav-link active">Профиль</a>
+            <a href="{% url "my_jobs" %}" class="nav-link">Мои вакансии</a>
+        </nav>
+
+        <button class="logout-btn" onclick="window.location.href='{% url 'logout' %}'">Выйти</button>
+        </a>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-card">
+            <h1>Профиль руководителя</h1>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <form id="editForm" method="POST">
+                {% csrf_token %}
+                <div class="profile-info">
+                    <label for="name">Имя</label>
+                    <input type="text" id="name" name="name" value="{{ leader.name }}" readonly>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ leader.email }}" readonly>
+
+                    <label for="company">Компания</label>
+                    <input type="text" id="company" name="company" value="{{ leader.company }}" readonly>
+
+                    <label for="city">Город компании</label>
+                    <input type="text" id="city" name="city" value="{{ leader.city }}" readonly>
+                </div>
+
+                <div class="buttons">
+                    <button type="button" id="editBtn" class="btn-edit">Редактировать профиль</button>
+                    <button type="submit" id="saveBtn" class="btn-save" style="display:none;">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+    const editBtn = document.getElementById("editBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const inputs = document.querySelectorAll("#editForm input");
+
+    editBtn.addEventListener("click", () => {
+        inputs.forEach(input => input.removeAttribute("readonly"));
+        editBtn.style.display = "none";
+        saveBtn.style.display = "inline-block";
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const messages = document.querySelectorAll('.messages li');
+        messages.forEach((msg, index) => {
+            // через 3 секунды начинаем анимацию
+            setTimeout(() => {
+                msg.style.opacity = '0';
+                msg.style.transform = 'translateY(-20px)'; // поднимаем вверх
+                // через 0.8 секунды удаляем элемент
+                setTimeout(() => msg.remove(), 800);
+            }, 3000 + index * 200); // добавляем небольшую задержку для красивого эффекта по очереди
+        });
+    });
+</script>
+    
+</body>
+</html>

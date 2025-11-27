@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobMatch — Кандидат</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <header class="header">
+        <a href="{% url 'candidate_home' %}"  class="logo">
+            <img src="{% static 'png/logo.png' %}" alt="Logo" class="logo-img">
+            <aspan class="logo-text">JobMatch</span>
+
+        <nav class="nav">
+            <a href="{% url 'candidate_home' %}" class="nav-link active">Главная</a>
+            <a href="{% url 'profile_candidate' %}" class="nav-link">Профиль</a>
+            <a href="{% url "job_list" %}" class="nav-link">Вакансии</a>
+        </nav>
+
+        <button class="logout-btn" onclick="window.location.href='{% url 'logout' %}'">Выйти</button>
+        </a>
+    </header>
+
+    <main class="main-content">
+        <div class="welcome">
+            <h1>Добро пожаловать, {{ request.session.user_name }}!</h1>
+            <p>Здесь вы можете искать вакансии, создавать резюме и откликаться на интересные предложения.</p>
+            <button class="main-btn">Найти работу</button>
+        </div>
+    </main>
+    
+</body>
+</html>
